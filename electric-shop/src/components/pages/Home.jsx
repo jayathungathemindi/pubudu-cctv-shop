@@ -35,7 +35,8 @@ function Home() {
     const handleScroll = () => {
       const section = document.getElementById("products");
       if (!section) return;
-      const reached = section.getBoundingClientRect().top < window.innerHeight / 2;
+      const reached =
+        section.getBoundingClientRect().top < window.innerHeight / 2;
       setActiveSection(reached ? "products" : "home");
     };
     handleScroll();
@@ -132,7 +133,7 @@ function Home() {
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search products..."
+              placeholder="Search your products..."
               aria-label="Search products"
             />
             {search && (
@@ -151,7 +152,9 @@ function Home() {
             <div className="nav-pills">
               <a
                 href="#home"
-                className={activeSection === "home" ? "nav-item active" : "nav-item"}
+                className={
+                  activeSection === "home" ? "nav-item active" : "nav-item"
+                }
               >
                 <span className="nav-icon">🏠</span> Home
               </a>
@@ -238,10 +241,7 @@ function Home() {
       </div>
 
       {selectedProductId && (
-        <ProductDetails
-          productId={selectedProductId}
-          onClose={closeDetails}
-        />
+        <ProductDetails productId={selectedProductId} onClose={closeDetails} />
       )}
 
       {/* {showAddForm && (
