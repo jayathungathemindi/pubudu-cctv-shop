@@ -1,0 +1,304 @@
+/* ---------- Shared ---------- */
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.admin-btn.primary {
+  background: var(--brand);
+  color: #ffffff;
+}
+
+.admin-btn.primary:hover {
+  background: var(--brand-dark);
+}
+
+.admin-btn.primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-btn.light {
+  background: var(--surface-alt);
+  color: var(--ink);
+}
+
+.admin-btn.light:hover {
+  background: var(--line);
+}
+
+.admin-error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--brand-soft);
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.admin-info {
+  color: var(--muted);
+}
+
+/* ---------- Login page ---------- */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-hover) 60%, var(--brand) 160%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 32px 28px;
+  background: var(--surface);
+  border-radius: 16px;
+  border-top: 5px solid var(--brand);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-logo {
+  height: 48px;
+  width: auto;
+  align-self: center;
+}
+
+.login-card h1 {
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: 24px;
+  color: var(--ink);
+}
+
+.login-subtitle {
+  margin: -10px 0 4px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.login-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.login-card input {
+  padding: 11px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.login-card input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.15);
+}
+
+.login-back {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.login-back:hover {
+  color: var(--brand);
+}
+
+/* ---------- Admin page ---------- */
+.admin-page {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 30px;
+  background: var(--surface);
+  border-top: 4px solid var(--brand);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.admin-header img {
+  height: 48px;
+  width: auto;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-user {
+  margin-right: 6px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.admin-main {
+  padding: 30px;
+}
+
+.admin-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-title-row h1 {
+  margin: 0;
+  font-size: 28px;
+  color: var(--ink);
+}
+
+.admin-title-row p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table th {
+  padding: 14px 16px;
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--surface-alt);
+  color: var(--text);
+}
+
+.admin-table tr:hover td {
+  background: var(--surface-alt);
+}
+
+.admin-table img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: var(--surface-alt);
+}
+
+.admin-table .product-name {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.no-image {
+  font-size: 12px;
+  color: var(--subtle);
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.badge.in {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.badge.out {
+  background: var(--brand-soft);
+  color: var(--danger);
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.action-btn.edit {
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.action-btn.edit:hover {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #ffffff;
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 10px 16px;
+  }
+
+  .admin-header img {
+    height: 36px;
+  }
+
+  .admin-user {
+    display: none;
+  }
+
+  .admin-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .admin-main {
+    padding: 20px 16px;
+  }
+
+  .admin-title-row h1 {
+    font-size: 22px;
+  }
+}

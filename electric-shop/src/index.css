@@ -1,0 +1,48 @@
+/* ===== Colors used across the whole website =====
+   Change a color here and it changes everywhere. */
+:root {
+  /* Brand (from the logo) */
+  --brand: #dc143c;
+  --brand-dark: #b01030;
+  --brand-soft: #fdecef;
+
+  /* Text */
+  --ink: #1f2430; /* headings, prices, main text */
+  --ink-hover: #343b4d;
+  --text: #475569; /* normal text */
+  --muted: #6b7280; /* small / less important text */
+  --subtle: #9ca3af; /* hints, placeholders */
+
+  /* Backgrounds and lines */
+  --bg: #f6f7f9; /* page background */
+  --surface: #ffffff; /* cards, boxes */
+  --surface-alt: #f3f4f6; /* light grey areas */
+  --line: #e5e7eb; /* borders */
+  --line-strong: #d1d5db; /* input borders */
+
+  /* Status */
+  --danger: #b91c1c;
+  --success: #15803d;
+  --success-soft: #dcfce7;
+
+  --font: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
