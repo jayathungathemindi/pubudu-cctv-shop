@@ -220,8 +220,77 @@
 }
 
 .dropdown-menu button:hover {
-  background: var(--brand-soft);
-  color: var(--brand);
+  background: var(--surface-alt);
+  color: var(--ink);
+}
+
+/* Category being shown right now */
+.dropdown-menu button.selected {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.dropdown-check {
+  margin-left: auto;
+  font-weight: 700;
+}
+
+/* Sub-categories, indented under their category */
+.dropdown-sub {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 4px 22px;
+  padding-left: 10px;
+  border-left: 2px solid var(--line);
+}
+
+.dropdown-menu .dropdown-sub button {
+  padding: 7px 10px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.dropdown-menu .dropdown-sub button.selected {
+  color: var(--accent);
+}
+
+/* The menu is taller now - scroll inside it on short screens */
+.dropdown-menu {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+/* Quick filter buttons above the products (Rice Cooker, Kettle ...) */
+.sub-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.sub-chip {
+  padding: 8px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.sub-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.sub-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
 }
 
 @keyframes dropdownOpen {
@@ -263,11 +332,22 @@
   width: 100%;
 }
 
-/* Banner slider - full screen width */
+/* Banner slider.
+   ✏️ --banner-max-width: how wide the banner can get on big screens.
+   ✏️ --banner-ratio: width ÷ height. The images are 2.85; a slightly bigger
+      number makes the banner a bit shorter by trimming a thin strip from the
+      top and bottom (keep it 3.05 or less so the product labels aren't cut). */
 .hero-slider {
+  --banner-max-width: 1400px;
+  --banner-ratio: 3.05;
+
   position: relative;
-  width: 100%;
+  width: calc(100% - 40px);
+  max-width: var(--banner-max-width);
+  margin: 20px auto 0;
   overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
 }
 
 .slider-track {
@@ -278,7 +358,8 @@
 .slider-track img {
   flex: 0 0 100%;
   width: 100%;
-  height: auto;
+  aspect-ratio: var(--banner-ratio);
+  object-fit: cover;
   display: block;
 }
 
@@ -396,6 +477,12 @@
 
   .section-title {
     font-size: 24px;
+  }
+
+  .hero-slider {
+    width: calc(100% - 24px);
+    margin-top: 12px;
+    border-radius: 12px;
   }
 
   .slider-arrow {

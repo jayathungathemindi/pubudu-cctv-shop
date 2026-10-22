@@ -3,6 +3,7 @@ import Home from "./components/pages/Home";
 import AdminPage from "./components/pages/AdminPage";
 import AdminLogin from "./components/pages/AdminLogin";
 import ContactPage from "./components/pages/ContactPage";
+import { CartDrawer } from "./components/pages/Cart";
 import "./App.css";
 
 function NotFound() {
@@ -17,13 +18,16 @@ function NotFound() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/contact" element={<ContactPage />} />
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin" element={<AdminPage />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <CartDrawer />
+    </>
   );
 }
 

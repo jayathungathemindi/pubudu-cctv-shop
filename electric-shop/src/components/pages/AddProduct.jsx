@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
+import { subCategoriesOf } from "../../categories";
 import "./AddProduct.css";
 
 const emptyForm = {
   name: "",
   price: "",
   stock: "",
-  image: "",
   category: "",
+  subCategory: "",
   description: "",
 };
 
 const emptySpec = { label: "", value: "" };
+
+const MAX_IMAGES = 5;
 
 // If "product" is given, the form edits that product. Otherwise it adds a new one.
 function AddProduct({
@@ -29,11 +32,15 @@ function AddProduct({
           name: product.name,
           price: product.price,
           stock: product.stock,
-          image: product.image || "",
           category: product.category,
+          subCategory: product.subCategory || "",
           description: "",
         }
       : emptyForm,
+  );
+  // First image is the main one (shown on the product card)
+  const [images, setImages] = useState(
+    isEdit && product.image ? [product.image] : [""],
   );
   const [specs, setSpecs] = useState([{ ...emptySpec }]);
   const [loadingDetails, setLoadingDetails] = useState(isEdit);
@@ -51,17 +58,42 @@ function AddProduct({
       .then((data) => {
         setForm((f) => ({ ...f, description: data.description || "" }));
         setSpecs(data.specs.length > 0 ? data.specs : [{ ...emptySpec }]);
+        if (data.images?.length > 0) setImages(data.images);
       })
       .catch(() => setError("Could not load product details."))
       .finally(() => setLoadingDetails(false));
   }, [isEdit, product]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    // A new category has different sub-categories - clear the old choice
+    if (name === "category") {
+      setForm({ ...form, category: value, subCategory: "" });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
+
+  const subCategories = subCategoriesOf(form.category);
 
   const changeSpec = (index, field, value) => {
     setSpecs(specs.map((s, i) => (i === index ? { ...s, [field]: value } : s)));
+  };
+
+  const changeImage = (index, value) => {
+    setImages(images.map((url, i) => (i === index ? value : url)));
+  };
+
+  const addImage = () => setImages([...images, ""]);
+
+  const removeImage = (index) => {
+    const next = images.filter((_, i) => i !== index);
+    setImages(next.length > 0 ? next : [""]);
+  };
+
+  // Move an image to the front so it becomes the main image
+  const makeMainImage = (index) => {
+    setImages([images[index], ...images.filter((_, i) => i !== index)]);
   };
 
   const addSpec = () => setSpecs([...specs, { ...emptySpec }]);
@@ -87,7 +119,7 @@ function AddProduct({
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ ...form, specs }),
+        body: JSON.stringify({ ...form, images, specs }),
       });
       const data = await res.json();
 
@@ -185,19 +217,74 @@ function AddProduct({
           </select>
         </label>
 
-        <label>
-          Image Path
-          <input
-            name="image"
-            value={form.image}
-            onChange={handleChange}
-            placeholder="e.g. /images/samsung-tv.jpg"
-          />
-        </label>
-
-        {form.image && (
-          <img className="image-preview" src={form.image} alt="Preview" />
+        {subCategories.length > 0 && (
+          <label>
+            Sub-category
+            <select
+              name="subCategory"
+              value={form.subCategory}
+              onChange={handleChange}
+            >
+              <option value="">-- Choose a sub-category --</option>
+              {subCategories.map((sub) => (
+                <option key={sub} value={sub}>
+                  {sub}
+                </option>
+              ))}
+            </select>
+          </label>
         )}
+
+        <div className="images-editor">
+          <div className="specs-title">
+            Images
+            <span>The first image is shown on the product card</span>
+          </div>
+
+          {loadingDetails ? (
+            <p className="specs-loading">Loading...</p>
+          ) : (
+            images.map((url, index) => (
+              <div className="image-row" key={index}>
+                <div className="image-thumb">
+                  {url ? <img src={url} alt="" /> : <span>No image</span>}
+                </div>
+                <div className="image-row-fields">
+                  <input
+                    value={url}
+                    onChange={(e) => changeImage(index, e.target.value)}
+                    placeholder="e.g. /images/samsung-tv.jpg"
+                  />
+                  {index === 0 ? (
+                    <span className="image-main-tag">Main image</span>
+                  ) : (
+                    <button
+                      type="button"
+                      className="image-make-main"
+                      onClick={() => makeMainImage(index)}
+                    >
+                      Make main
+                    </button>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  className="spec-remove"
+                  onClick={() => removeImage(index)}
+                  aria-label="Remove image"
+                >
+                  ✕
+                </button>
+              </div>
+            ))
+          )}
+
+          {images.length < MAX_IMAGES && (
+            <button type="button" className="spec-add" onClick={addImage}>
+              + Add image
+            </button>
+          )}
+        </div>
 
         <label>
           Description

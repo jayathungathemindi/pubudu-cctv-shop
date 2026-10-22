@@ -6,6 +6,15 @@
   --brand-dark: #b01030;
   --brand-soft: #fdecef;
 
+  /* Friendly bright red for buttons and prices on product cards */
+  --accent: #ef4444;
+  --accent-hover: #f05a5a;
+  --accent-soft: #fef2f2;
+
+  /* Product card text */
+  --card-name: #1e3a8a; /* dark blue product name */
+  --card-price: #2563eb; /* bright blue price */
+
   /* Text */
   --ink: #1f2430; /* headings, prices, main text */
   --ink-hover: #343b4d;
@@ -26,6 +35,7 @@
   --success-soft: #dcfce7;
 
   --font: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-card: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif; /* product cards */
 }
 
 * {

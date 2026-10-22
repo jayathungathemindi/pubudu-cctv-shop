@@ -22,6 +22,17 @@
   outline-offset: 2px;
 }
 
+.whatsapp-btn.icon-only {
+  flex-shrink: 0;
+  width: 42px;
+  padding: 0;
+}
+
+.whatsapp-btn.icon-only svg {
+  width: 20px;
+  height: 20px;
+}
+
 .whatsapp-btn svg {
   width: 18px;
   height: 18px;

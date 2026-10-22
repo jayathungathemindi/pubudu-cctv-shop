@@ -1,0 +1,64 @@
+.highlights {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px 48px;
+  padding: 26px 30px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.highlight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 340px;
+}
+
+.highlight-icon {
+  flex-shrink: 0;
+  width: 64px;
+  height: 48px;
+}
+
+.highlight-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.highlight h3 {
+  margin: 0 0 4px;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.highlight p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+/* Phones: stack the highlights */
+@media (max-width: 600px) {
+  .highlights {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 20px 16px;
+  }
+
+  .highlight-icon {
+    width: 52px;
+    height: 40px;
+  }
+
+  .highlight h3 {
+    font-size: 17px;
+  }
+
+  .highlight p {
+    font-size: 14px;
+  }
+}

@@ -3,21 +3,19 @@ import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import ProductDetails from "./ProductDetails";
 import HeroSlider from "./HeroSlider";
+import Highlights from "./Highlights";
+import { CartButton } from "./Cart";
+import { useCart } from "../../cart";
+import { categories, subCategoriesOf } from "../../categories";
 //import AddProduct from "./AddProduct";
 import "./Home.css";
 
 const API_URL = "http://localhost:5000/api/products";
 
-const categories = [
-  { name: "TV & Home Audio", icon: "📺" },
-  { name: "CCTV & Security", icon: "📹" },
-  { name: "Kitchen Appliances", icon: "🍳" },
-  { name: "Hardware & Electrical", icon: "🔌" },
-];
-
 function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedSub, setSelectedSub] = useState(null); // e.g. "Kettle"
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -25,6 +23,7 @@ function Home() {
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [search, setSearch] = useState("");
   const dropdownRef = useRef(null);
+  const { syncWithProducts } = useCart();
 
   const [activeSection, setActiveSection] = useState("home");
 
@@ -51,10 +50,13 @@ function Home() {
         if (!res.ok) throw new Error("Server error");
         return res.json();
       })
-      .then((data) => setProducts(data))
+      .then((data) => {
+        setProducts(data);
+        syncWithProducts(data); // keep cart prices and stock up to date
+      })
       .catch(() => setError("Could not load products. Is the server running?"))
       .finally(() => setLoading(false));
-  }, []);
+  }, [syncWithProducts]);
 
   // Show a newly added product without reloading the page
   /*const handleProductAdded = (newProduct) => {
@@ -72,8 +74,10 @@ function Home() {
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  const chooseCategory = (name) => {
+  // sub = null means the whole category
+  const chooseCategory = (name, sub = null) => {
     setSelectedCategory(name);
+    setSelectedSub(sub);
     setMenuOpen(false);
     scrollToProducts();
   };
@@ -87,18 +91,25 @@ function Home() {
   const filteredProducts = products.filter((product) => {
     const inCategory =
       selectedCategory === "All" || product.category === selectedCategory;
-    const text = `${product.name} ${product.category}`.toLowerCase();
+    const inSub = !selectedSub || product.subCategory === selectedSub;
+    const text =
+      `${product.name} ${product.category} ${product.subCategory ?? ""}`.toLowerCase();
     const matchesSearch = searchWords.every((word) => text.includes(word));
-    return inCategory && matchesSearch;
+    return inCategory && inSub && matchesSearch;
   });
 
   const clearFilters = () => {
     setSelectedCategory("All");
+    setSelectedSub(null);
     setSearch("");
   };
 
+  // Quick filter buttons above the products, e.g. Rice Cooker, Kettle ...
+  const subCategories = subCategoriesOf(selectedCategory);
+
   let title = "Our Products";
   if (search.trim()) title = `Results for "${search.trim()}"`;
+  else if (selectedSub) title = selectedSub;
   else if (selectedCategory !== "All") title = selectedCategory;
 
   return (
@@ -162,7 +173,9 @@ function Home() {
               <div className="nav-dropdown" ref={dropdownRef}>
                 <button
                   className={
-                    menuOpen || activeSection === "products"
+                    menuOpen ||
+                    activeSection === "products" ||
+                    selectedCategory !== "All"
                       ? "nav-item active"
                       : "nav-item"
                   }
@@ -174,17 +187,48 @@ function Home() {
 
                 {menuOpen && (
                   <div className="dropdown-menu">
-                    <button onClick={() => chooseCategory("All")}>
-                      <span>🛒</span> All Products
-                    </button>
-                    {categories.map((category) => (
-                      <button
-                        key={category.name}
-                        onClick={() => chooseCategory(category.name)}
-                      >
-                        <span>{category.icon}</span> {category.name}
-                      </button>
-                    ))}
+                    {[{ name: "All", label: "All Products", icon: "🛒" }, ...categories].map(
+                      (category) => {
+                        const isSelected =
+                          selectedCategory === category.name && !selectedSub;
+                        return (
+                          <div key={category.name}>
+                            <button
+                              className={isSelected ? "selected" : ""}
+                              aria-current={isSelected ? "true" : undefined}
+                              onClick={() => chooseCategory(category.name)}
+                            >
+                              <span>{category.icon}</span>
+                              {category.label || category.name}
+                              {isSelected && <span className="dropdown-check">✓</span>}
+                            </button>
+
+                            {category.subCategories && (
+                              <div className="dropdown-sub">
+                                {category.subCategories.map((sub) => {
+                                  const subSelected =
+                                    selectedCategory === category.name &&
+                                    selectedSub === sub;
+                                  return (
+                                    <button
+                                      key={sub}
+                                      className={subSelected ? "selected" : ""}
+                                      aria-current={subSelected ? "true" : undefined}
+                                      onClick={() => chooseCategory(category.name, sub)}
+                                    >
+                                      {sub}
+                                      {subSelected && (
+                                        <span className="dropdown-check">✓</span>
+                                      )}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      },
+                    )}
                   </div>
                 )}
               </div>
@@ -193,6 +237,8 @@ function Home() {
             <Link to="/contact" className="nav-cta">
               <span className="nav-icon">📞</span> Contact Us
             </Link>
+
+            <CartButton />
 
             {/* <button
               className="add-product-btn"
@@ -204,6 +250,7 @@ function Home() {
         </div>
       </header>
       <HeroSlider />
+      <Highlights />
       <div className="shop">
         <h2 className="section-title" id="products">
           {title}
@@ -213,6 +260,21 @@ function Home() {
           <button className="show-all-btn" onClick={clearFilters}>
             ← Show all products
           </button>
+        )}
+
+        {subCategories.length > 0 && (
+          <div className="sub-filters">
+            {[null, ...subCategories].map((sub) => (
+              <button
+                key={sub ?? "all"}
+                className={selectedSub === sub ? "sub-chip active" : "sub-chip"}
+                aria-pressed={selectedSub === sub}
+                onClick={() => setSelectedSub(sub)}
+              >
+                {sub ?? "All"}
+              </button>
+            ))}
+          </div>
         )}
 
         {loading && <p className="no-products">Loading products...</p>}
@@ -226,6 +288,7 @@ function Home() {
               price={product.price}
               stock={product.stock}
               image={product.image}
+              product={product}
               onClick={() => setSelectedProductId(product.id)}
             />
           ))}

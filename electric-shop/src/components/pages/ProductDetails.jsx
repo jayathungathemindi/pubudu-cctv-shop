@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import WhatsAppButton from "./WhatsAppButton";
+import { AddToCartButton } from "./Cart";
 import "./ProductDetails.css";
 
 function ProductDetails({ productId, onClose }) {
   const [product, setProduct] = useState(null);
   const [error, setError] = useState("");
+  const [activeImage, setActiveImage] = useState(0);
 
   // Load the full product (with specifications) from the server
   useEffect(() => {
@@ -29,6 +31,7 @@ function ProductDetails({ productId, onClose }) {
   }, [onClose]);
 
   const inStock = product && product.stock > 0;
+  const images = product?.images ?? (product?.image ? [product.image] : []);
 
   return (
     <div className="details-overlay" onClick={onClose}>
@@ -43,11 +46,28 @@ function ProductDetails({ productId, onClose }) {
         {product && (
           <>
             <div className="details-top">
-              <div className="details-image">
-                {product.image ? (
-                  <img src={product.image} alt={product.name} />
-                ) : (
-                  <span>No image</span>
+              <div className="details-gallery">
+                <div className="details-image">
+                  {images.length > 0 ? (
+                    <img src={images[activeImage]} alt={product.name} />
+                  ) : (
+                    <span>No image</span>
+                  )}
+                </div>
+
+                {images.length > 1 && (
+                  <div className="details-thumbs">
+                    {images.map((url, index) => (
+                      <button
+                        key={index}
+                        className={index === activeImage ? "thumb active" : "thumb"}
+                        onClick={() => setActiveImage(index)}
+                        aria-label={`Show image ${index + 1}`}
+                      >
+                        <img src={url} alt="" />
+                      </button>
+                    ))}
+                  </div>
                 )}
               </div>
 
@@ -63,7 +83,10 @@ function ProductDetails({ productId, onClose }) {
                   <p className="details-description">{product.description}</p>
                 )}
 
-                <WhatsAppButton className="details-whatsapp" product={product} />
+                <div className="details-buttons">
+                  <AddToCartButton className="details-button" product={product} />
+                  <WhatsAppButton className="details-button" product={product} />
+                </div>
               </div>
             </div>
 

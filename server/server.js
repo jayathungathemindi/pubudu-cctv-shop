@@ -17,7 +17,8 @@ app.get("/api/products", async (req, res) => {
     const pool = await getPool();
     const result = await pool.request().query(`
       SELECT Id AS id, Name AS name, Price AS price,
-             Stock AS stock, Image AS image, Category AS category
+             Stock AS stock, Image AS image, Category AS category,
+             SubCategory AS subCategory
       FROM Products
     `);
     res.json(result.recordset);
@@ -38,11 +39,16 @@ app.get("/api/products/:id", async (req, res) => {
     const pool = await getPool();
     const result = await pool.request().input("id", sql.Int, id).query(`
       SELECT Id AS id, Name AS name, Price AS price, Stock AS stock,
-             Image AS image, Category AS category, Description AS description
+             Image AS image, Category AS category, SubCategory AS subCategory,
+             Description AS description
       FROM Products WHERE Id = @id;
 
       SELECT Label AS label, Value AS value
       FROM ProductSpecs WHERE ProductId = @id
+      ORDER BY SortOrder, Id;
+
+      SELECT Url AS url
+      FROM ProductImages WHERE ProductId = @id
       ORDER BY SortOrder, Id;
     `);
 
@@ -52,6 +58,11 @@ app.get("/api/products/:id", async (req, res) => {
     }
 
     product.specs = result.recordsets[1];
+    product.images = result.recordsets[2].map((row) => row.url);
+    // Older products may only have the single Image column filled
+    if (product.images.length === 0 && product.image) {
+      product.images = [product.image];
+    }
     res.json(product);
   } catch (err) {
     console.error(err);
@@ -59,12 +70,23 @@ app.get("/api/products/:id", async (req, res) => {
   }
 });
 
-const categories = [
-  "TV & Home Audio",
-  "CCTV & Security",
-  "Kitchen Appliances",
-  "Hardware & Electrical",
-];
+// Category → its sub-categories (empty list = no sub-categories)
+const categories = {
+  "TV & Home Audio": [],
+  "CCTV & Security": [],
+  "Kitchen Appliances": [
+    "Rice Cooker",
+    "Multi Cooker",
+    "Toaster",
+    "Air Fryer",
+    "Blender",
+    "Kettle",
+  ],
+  "Hardware & Electrical": [],
+  "Lighting Products": [],
+  "Vehicle Accessories": [],
+  "Home & Décor": [],
+};
 
 // Keeps only filled spec rows: [{ label, value }]
 function cleanSpecs(specs) {
@@ -96,18 +118,50 @@ async function saveSpecs(transaction, productId, specs) {
   }
 }
 
+const MAX_IMAGES = 5;
+
+// Keeps only filled image paths: ["/images/a.jpg", ...]. The first one is the main image.
+// Older clients send a single "image" instead of an "images" list.
+function cleanImages({ images, image }) {
+  const list = Array.isArray(images) ? images : [image];
+  return list
+    .map((url) => String(url ?? "").trim().slice(0, 255))
+    .filter(Boolean)
+    .slice(0, MAX_IMAGES);
+}
+
+// Replaces all images of a product (inside a transaction)
+async function saveImages(transaction, productId, images) {
+  await new sql.Request(transaction)
+    .input("id", sql.Int, productId)
+    .query("DELETE FROM ProductImages WHERE ProductId = @id");
+
+  for (let i = 0; i < images.length; i++) {
+    await new sql.Request(transaction)
+      .input("id", sql.Int, productId)
+      .input("url", sql.NVarChar(255), images[i])
+      .input("order", sql.Int, i).query(`
+        INSERT INTO ProductImages (ProductId, Url, SortOrder)
+        VALUES (@id, @url, @order)
+      `);
+  }
+}
+
 // Checks product data - returns an error message, or null if OK
-function validateProduct({ name, price, stock, category }) {
+function validateProduct({ name, price, stock, category, subCategory }) {
   if (!name || !name.trim()) return "Product name is required";
   if (isNaN(price) || Number(price) <= 0) return "Price must be more than 0";
   if (isNaN(stock) || Number(stock) < 0) return "Stock cannot be negative";
-  if (!categories.includes(category)) return "Please choose a valid category";
+  if (!Object.hasOwn(categories, category)) return "Please choose a valid category";
+  // Sub-category is optional, but must belong to the chosen category
+  if (subCategory && !categories[category].includes(subCategory))
+    return "Please choose a valid sub-category";
   return null;
 }
 
 // Add a new product (admin only)
 app.post("/api/products", requireAdmin, async (req, res) => {
-  const { name, price, stock, image, category, description } = req.body;
+  const { name, price, stock, category, subCategory, description } = req.body;
 
   const invalid = validateProduct(req.body);
   if (invalid) {
@@ -115,6 +169,7 @@ app.post("/api/products", requireAdmin, async (req, res) => {
   }
 
   const specs = cleanSpecs(req.body.specs);
+  const images = cleanImages(req.body);
   let transaction;
 
   try {
@@ -126,22 +181,25 @@ app.post("/api/products", requireAdmin, async (req, res) => {
       .input("name", sql.NVarChar(150), name.trim())
       .input("price", sql.Decimal(10, 2), Number(price))
       .input("stock", sql.Int, Number(stock))
-      .input("image", sql.NVarChar(255), image || null)
+      .input("image", sql.NVarChar(255), images[0] || null)
       .input("category", sql.NVarChar(100), category)
+      .input("subCategory", sql.NVarChar(100), subCategory || null)
       .input("description", sql.NVarChar(sql.MAX), description?.trim() || null)
       .query(`
-        INSERT INTO Products (Name, Price, Stock, Image, Category, Description)
+        INSERT INTO Products (Name, Price, Stock, Image, Category, SubCategory, Description)
         OUTPUT INSERTED.Id AS id, INSERTED.Name AS name, INSERTED.Price AS price,
                INSERTED.Stock AS stock, INSERTED.Image AS image,
-               INSERTED.Category AS category, INSERTED.Description AS description
-        VALUES (@name, @price, @stock, @image, @category, @description)
+               INSERTED.Category AS category, INSERTED.SubCategory AS subCategory,
+               INSERTED.Description AS description
+        VALUES (@name, @price, @stock, @image, @category, @subCategory, @description)
       `);
 
     const product = result.recordset[0];
     await saveSpecs(transaction, product.id, specs);
+    await saveImages(transaction, product.id, images);
     await transaction.commit();
 
-    res.status(201).json({ ...product, specs });
+    res.status(201).json({ ...product, specs, images });
   } catch (err) {
     if (transaction) await transaction.rollback().catch(() => {});
     console.error(err);
@@ -152,7 +210,7 @@ app.post("/api/products", requireAdmin, async (req, res) => {
 // Edit a product (admin only)
 app.put("/api/products/:id", requireAdmin, async (req, res) => {
   const id = Number(req.params.id);
-  const { name, price, stock, image, category, description } = req.body;
+  const { name, price, stock, category, subCategory, description } = req.body;
 
   if (!Number.isInteger(id) || id <= 0) {
     return res.status(400).json({ message: "Invalid product id" });
@@ -164,6 +222,7 @@ app.put("/api/products/:id", requireAdmin, async (req, res) => {
   }
 
   const specs = cleanSpecs(req.body.specs);
+  const images = cleanImages(req.body);
   let transaction;
 
   try {
@@ -176,16 +235,18 @@ app.put("/api/products/:id", requireAdmin, async (req, res) => {
       .input("name", sql.NVarChar(150), name.trim())
       .input("price", sql.Decimal(10, 2), Number(price))
       .input("stock", sql.Int, Number(stock))
-      .input("image", sql.NVarChar(255), image || null)
+      .input("image", sql.NVarChar(255), images[0] || null)
       .input("category", sql.NVarChar(100), category)
+      .input("subCategory", sql.NVarChar(100), subCategory || null)
       .input("description", sql.NVarChar(sql.MAX), description?.trim() || null)
       .query(`
         UPDATE Products
-        SET Name = @name, Price = @price, Stock = @stock,
-            Image = @image, Category = @category, Description = @description
+        SET Name = @name, Price = @price, Stock = @stock, Image = @image,
+            Category = @category, SubCategory = @subCategory, Description = @description
         OUTPUT INSERTED.Id AS id, INSERTED.Name AS name, INSERTED.Price AS price,
                INSERTED.Stock AS stock, INSERTED.Image AS image,
-               INSERTED.Category AS category, INSERTED.Description AS description
+               INSERTED.Category AS category, INSERTED.SubCategory AS subCategory,
+               INSERTED.Description AS description
         WHERE Id = @id
       `);
 
@@ -195,9 +256,10 @@ app.put("/api/products/:id", requireAdmin, async (req, res) => {
     }
 
     await saveSpecs(transaction, id, specs);
+    await saveImages(transaction, id, images);
     await transaction.commit();
 
-    res.json({ ...result.recordset[0], specs });
+    res.json({ ...result.recordset[0], specs, images });
   } catch (err) {
     if (transaction) await transaction.rollback().catch(() => {});
     console.error(err);

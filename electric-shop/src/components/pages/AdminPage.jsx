@@ -2,16 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { getToken, getUsername, logout } from "../../auth";
 import AddProduct from "./AddProduct";
+import { categories } from "../../categories";
 import "./Admin.css";
 
 const API_URL = "http://localhost:5000/api/products";
-
-const categories = [
-  { name: "TV & Home Audio" },
-  { name: "CCTV & Security" },
-  { name: "Kitchen Appliances" },
-  { name: "Hardware & Electrical" },
-];
 
 function AdminPage() {
   const navigate = useNavigate();
@@ -103,7 +97,12 @@ function AdminPage() {
                       )}
                     </td>
                     <td className="product-name">{product.name}</td>
-                    <td>{product.category}</td>
+                    <td>
+                      {product.category}
+                      {product.subCategory && (
+                        <span className="sub-category"> › {product.subCategory}</span>
+                      )}
+                    </td>
                     <td>{Number(product.price).toLocaleString()}</td>
                     <td>
                       <span className={product.stock > 0 ? "badge in" : "badge out"}>
