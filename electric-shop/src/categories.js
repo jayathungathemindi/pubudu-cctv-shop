@@ -1,7 +1,7 @@
 // ✏️ Product categories - used by the shop menu and the admin form.
 // If you change these, also change the list in server/server.js.
 export const categories = [
-  { name: "TV & Home Audio", icon: "📺" },
+  { name: "TV & Audio", icon: "📺" },
   { name: "CCTV & Security", icon: "📹" },
   {
     name: "Kitchen Appliances",
@@ -15,10 +15,16 @@ export const categories = [
       "Kettle",
     ],
   },
-  { name: "Hardware & Electrical", icon: "🔌" },
+
+  {
+    name: "Home Appliances",
+    icon: "🏠",
+    subCategories: ["Iron", "Fan"],
+  },
   { name: "Lighting Products", icon: "💡" },
   { name: "Vehicle Accessories", icon: "🚗" },
-  { name: "Home & Décor", icon: "🛋️" },
+  { name: "Hardware & Electrical", icon: "🔌" },
+  { name: "Gift & Décor", icon: "🎁" },
 ];
 
 export function subCategoriesOf(categoryName) {

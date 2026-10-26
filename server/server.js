@@ -72,7 +72,7 @@ app.get("/api/products/:id", async (req, res) => {
 
 // Category → its sub-categories (empty list = no sub-categories)
 const categories = {
-  "TV & Home Audio": [],
+  "TV & Audio": [],
   "CCTV & Security": [],
   "Kitchen Appliances": [
     "Rice Cooker",
@@ -82,10 +82,11 @@ const categories = {
     "Blender",
     "Kettle",
   ],
-  "Hardware & Electrical": [],
+  "Home Appliances": ["Iron", "Fan"],
   "Lighting Products": [],
   "Vehicle Accessories": [],
-  "Home & Décor": [],
+  "Hardware & Electrical": [],
+  "Gift & Décor": [],
 };
 
 // Keeps only filled spec rows: [{ label, value }]
