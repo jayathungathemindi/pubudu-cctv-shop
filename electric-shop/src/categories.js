@@ -24,7 +24,7 @@ export const categories = [
   {
     name: "Lighting Products",
     icon: "💡",
-    subCategories: ["Torch"],
+    subCategories: ["Study Lamps / Reading Lamps", "Touch"],
   },
   { name: "Vehicle Accessories", icon: "🚗" },
   { name: "Hardware & Electrical", icon: "🔌" },
