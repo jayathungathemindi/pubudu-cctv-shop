@@ -21,7 +21,11 @@ export const categories = [
     icon: "🏠",
     subCategories: ["Iron", "Fan"],
   },
-  { name: "Lighting Products", icon: "💡" },
+  {
+    name: "Lighting Products",
+    icon: "💡",
+    subCategories: ["Torch"],
+  },
   { name: "Vehicle Accessories", icon: "🚗" },
   { name: "Hardware & Electrical", icon: "🔌" },
   { name: "Gift & Décor", icon: "🎁" },

@@ -15,6 +15,8 @@ function AdminPage() {
   const [error, setError] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [search, setSearch] = useState("");
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     if (!token) return;
@@ -42,6 +44,43 @@ function AdminPage() {
     logout();
     navigate("/admin/login", { replace: true });
   };
+
+  const handleDelete = async (product) => {
+    if (!window.confirm(`Delete "${product.name}"? This cannot be undone.`)) return;
+
+    setDeletingId(product.id);
+    try {
+      const res = await fetch(`${API_URL}/${product.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Login expired - go back to the login page
+      if (res.status === 401) {
+        handleSessionExpired();
+        return;
+      }
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || "Could not delete the product");
+      }
+
+      setProducts(products.filter((p) => p.id !== product.id));
+    } catch (err) {
+      alert(err.message === "Failed to fetch" ? "Could not reach the server" : err.message);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  // Every word typed must appear in the product name or category
+  const searchWords = search.toLowerCase().split(" ").filter(Boolean);
+
+  const filteredProducts = products.filter((product) => {
+    const text =
+      `${product.name} ${product.category} ${product.subCategory ?? ""}`.toLowerCase();
+    return searchWords.every((word) => text.includes(word));
+  });
 
   return (
     <div className="admin-page">
@@ -74,6 +113,26 @@ function AdminPage() {
         {error && <p className="admin-error">{error}</p>}
 
         {!loading && !error && (
+          <div className="admin-search">
+            <input
+              type="search"
+              placeholder="🔍 Search by name or category..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {search.trim() && (
+              <span className="admin-info">
+                {filteredProducts.length} of {products.length} products
+              </span>
+            )}
+          </div>
+        )}
+
+        {!loading && !error && search.trim() && filteredProducts.length === 0 && (
+          <p className="admin-info">No products match "{search}".</p>
+        )}
+
+        {!loading && !error && (filteredProducts.length > 0 || !search.trim()) && (
           <div className="table-wrap">
             <table className="admin-table">
               <thead>
@@ -87,7 +146,7 @@ function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => (
+                {filteredProducts.map((product) => (
                   <tr key={product.id}>
                     <td>
                       {product.image ? (
@@ -115,6 +174,13 @@ function AdminPage() {
                         onClick={() => setEditingProduct(product)}
                       >
                         ✏️ Edit
+                      </button>
+                      <button
+                        className="action-btn delete"
+                        onClick={() => handleDelete(product)}
+                        disabled={deletingId === product.id}
+                      >
+                        {deletingId === product.id ? "Deleting..." : "🗑️ Delete"}
                       </button>
                     </td>
                   </tr>

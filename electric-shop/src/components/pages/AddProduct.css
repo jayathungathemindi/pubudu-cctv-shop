@@ -137,6 +137,43 @@
   font-size: 14px;
 }
 
+.image-input-row {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.add-product-form .image-upload {
+  flex-direction: row;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.add-product-form .image-upload:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.add-product-form .image-upload.busy {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* The real file picker is hidden - the label above opens it */
+.add-product-form .image-upload input {
+  display: none;
+}
+
 .image-main-tag {
   font-size: 12px;
   font-weight: 600;

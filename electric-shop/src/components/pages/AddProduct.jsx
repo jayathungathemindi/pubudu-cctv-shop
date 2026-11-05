@@ -14,6 +14,8 @@ const emptyForm = {
 const emptySpec = { label: "", value: "" };
 
 const MAX_IMAGES = 5;
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB, same as the server
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 // If "product" is given, the form edits that product. Otherwise it adds a new one.
 function AddProduct({
@@ -46,6 +48,7 @@ function AddProduct({
   const [loadingDetails, setLoadingDetails] = useState(isEdit);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploadingIndex, setUploadingIndex] = useState(null);
 
   // When editing, load the description and specifications too
   useEffect(() => {
@@ -82,6 +85,51 @@ function AddProduct({
 
   const changeImage = (index, value) => {
     setImages(images.map((url, i) => (i === index ? value : url)));
+  };
+
+  // Send the chosen file to the server and put its URL in this image row
+  const uploadImage = async (index, file) => {
+    if (!file) return;
+    setError("");
+
+    if (!IMAGE_TYPES.includes(file.type)) {
+      setError("Please choose a JPG, PNG, WEBP or GIF image.");
+      return;
+    }
+    if (file.size > MAX_IMAGE_SIZE) {
+      setError("Image is too big (max 5 MB).");
+      return;
+    }
+
+    setUploadingIndex(index);
+    try {
+      const res = await fetch("http://localhost:5000/api/uploads", {
+        method: "POST",
+        headers: {
+          "Content-Type": file.type,
+          Authorization: `Bearer ${token}`,
+        },
+        body: file,
+      });
+
+      // Login expired - go back to the login page
+      if (res.status === 401) {
+        onSessionExpired();
+        return;
+      }
+
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.message || "Could not upload the image");
+        return;
+      }
+
+      setImages((current) => current.map((url, i) => (i === index ? data.url : url)));
+    } catch {
+      setError("Could not connect to the server. Is it running?");
+    } finally {
+      setUploadingIndex(null);
+    }
   };
 
   const addImage = () => setImages([...images, ""]);
@@ -250,11 +298,29 @@ function AddProduct({
                   {url ? <img src={url} alt="" /> : <span>No image</span>}
                 </div>
                 <div className="image-row-fields">
-                  <input
-                    value={url}
-                    onChange={(e) => changeImage(index, e.target.value)}
-                    placeholder="e.g. /images/samsung-tv.jpg"
-                  />
+                  <div className="image-input-row">
+                    <input
+                      value={url}
+                      onChange={(e) => changeImage(index, e.target.value)}
+                      placeholder="Upload a photo or type /images/samsung-tv.jpg"
+                    />
+                    <label
+                      className={
+                        uploadingIndex === index ? "image-upload busy" : "image-upload"
+                      }
+                    >
+                      {uploadingIndex === index ? "Uploading..." : "📁 Upload"}
+                      <input
+                        type="file"
+                        accept={IMAGE_TYPES.join(",")}
+                        disabled={uploadingIndex !== null}
+                        onChange={(e) => {
+                          uploadImage(index, e.target.files[0]);
+                          e.target.value = ""; // allow choosing the same file again
+                        }}
+                      />
+                    </label>
+                  </div>
                   {index === 0 ? (
                     <span className="image-main-tag">Main image</span>
                   ) : (
@@ -344,7 +410,7 @@ function AddProduct({
           <button
             type="submit"
             className="btn-save"
-            disabled={saving || loadingDetails}
+            disabled={saving || loadingDetails || uploadingIndex !== null}
           >
             {saving ? "Saving..." : isEdit ? "Save Changes" : "Add Product"}
           </button>
