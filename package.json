@@ -1,0 +1,11 @@
+{
+  "name": "pubudu-cctv-shop",
+  "private": true,
+  "description": "Pubudu CCTV & Electricals shop. Azure runs `npm start` from here.",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

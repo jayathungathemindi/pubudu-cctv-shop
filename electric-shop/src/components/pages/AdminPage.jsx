@@ -5,7 +5,7 @@ import AddProduct from "./AddProduct";
 import { categories } from "../../categories";
 import "./Admin.css";
 
-const API_URL = "http://localhost:5000/api/products";
+const API_URL = "/api/products";
 
 function AdminPage() {
   const navigate = useNavigate();

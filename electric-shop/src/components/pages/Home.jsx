@@ -7,10 +7,9 @@ import Highlights from "./Highlights";
 import { CartButton } from "./Cart";
 import { useCart } from "../../cart";
 import { categories, subCategoriesOf } from "../../categories";
+import { fetchProducts } from "../../api";
 //import AddProduct from "./AddProduct";
 import "./Home.css";
-
-const API_URL = "http://localhost:5000/api/products";
 
 function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -43,13 +42,9 @@ function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Load products from the server (SQL Server)
+  // Load products from the server (SQL Server), or products.json on the public site
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error("Server error");
-        return res.json();
-      })
+    fetchProducts()
       .then((data) => {
         setProducts(data);
         syncWithProducts(data); // keep cart prices and stock up to date

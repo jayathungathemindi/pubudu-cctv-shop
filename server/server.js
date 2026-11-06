@@ -13,10 +13,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Uploaded product images are saved here and served at /uploads/<file>
-const UPLOAD_DIR = path.join(__dirname, "uploads");
+// Uploaded product images are saved here and served at /uploads/<file>.
+// Online (Azure) UPLOAD_DIR points to a folder that is kept between deploys.
+const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, "uploads");
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 app.use("/uploads", express.static(UPLOAD_DIR));
+// Images uploaded before going online are in the project's uploads folder
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Image type → file extension
 const IMAGE_TYPES = {
@@ -40,7 +43,7 @@ app.post(
     const fileName = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}${ext}`;
     try {
       await fs.promises.writeFile(path.join(UPLOAD_DIR, fileName), req.body);
-      res.json({ url: `http://localhost:${process.env.PORT}/uploads/${fileName}` });
+      res.json({ url: `/uploads/${fileName}` });
     } catch (err) {
       console.error(err);
       res.status(500).json({ message: "Could not save the image" });
@@ -390,6 +393,20 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on http://localhost:${process.env.PORT}`);
+// The built website (electric-shop/dist). Online, this server hosts the whole shop.
+const WEBSITE_DIR = path.join(__dirname, "..", "electric-shop", "dist");
+if (fs.existsSync(WEBSITE_DIR)) {
+  app.use(express.static(WEBSITE_DIR));
+  // Pages like /admin or /contact are handled by React, so send them index.html
+  app.use((req, res, next) => {
+    if (req.method !== "GET" || req.path.startsWith("/api/") || req.path.startsWith("/uploads/")) {
+      return next();
+    }
+    res.sendFile(path.join(WEBSITE_DIR, "index.html"));
+  });
+}
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });

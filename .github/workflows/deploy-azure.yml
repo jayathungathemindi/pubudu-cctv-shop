@@ -1,0 +1,52 @@
+# Builds the shop and puts it online on Azure (see DEPLOY-AZURE.md).
+# Not used now - the shop is hosted on Cloudflare Pages. It only runs if you start it
+# by hand from the Actions tab. To use Azure again, add back:
+#   push:
+#     branches: [main]
+name: Deploy to Azure
+
+on:
+  workflow_dispatch: # run by hand from the Actions tab
+
+env:
+  # ✏️ Change this to the name you give your Azure Web App
+  AZURE_WEBAPP_NAME: pubudu-cctv-shop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Build the website
+        working-directory: electric-shop
+        run: |
+          npm ci
+          npm run build
+
+      # Saved Daraz web pages in public/images are not used by the shop - keep them off the server
+      - name: Remove unused files from the build
+        run: find electric-shop/dist/images -maxdepth 1 \( -name '*_files' -o -name '*.html' \) -exec rm -rf {} +
+
+      - name: Install server packages
+        working-directory: server
+        run: npm ci --omit=dev
+
+      - name: Put everything into one folder
+        run: |
+          mkdir -p deploy/electric-shop
+          cp package.json deploy/
+          cp -r server deploy/server
+          cp -r electric-shop/dist deploy/electric-shop/dist
+          rm -f deploy/server/.env
+
+      - name: Send to Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: deploy

@@ -53,7 +53,7 @@ function AddProduct({
   // When editing, load the description and specifications too
   useEffect(() => {
     if (!isEdit) return;
-    fetch(`http://localhost:5000/api/products/${product.id}`)
+    fetch(`/api/products/${product.id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Server error");
         return res.json();
@@ -103,7 +103,7 @@ function AddProduct({
 
     setUploadingIndex(index);
     try {
-      const res = await fetch("http://localhost:5000/api/uploads", {
+      const res = await fetch("/api/uploads", {
         method: "POST",
         headers: {
           "Content-Type": file.type,
@@ -158,8 +158,8 @@ function AddProduct({
 
     try {
       const url = isEdit
-        ? `http://localhost:5000/api/products/${product.id}`
-        : "http://localhost:5000/api/products";
+        ? `/api/products/${product.id}`
+        : "/api/products";
 
       const res = await fetch(url, {
         method: isEdit ? "PUT" : "POST",

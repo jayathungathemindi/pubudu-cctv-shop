@@ -1,0 +1,466 @@
+[
+  {
+    "id": 1,
+    "name": "Richpower Rice Cooker 1.8L",
+    "price": 8350,
+    "stock": 5,
+    "image": "/images/RPRC-6086-1.8L-Rice-Cooker_01.jpg",
+    "category": "Kitchen Appliances",
+    "subCategory": "Rice Cooker",
+    "description": "All-in-one outer body\nAutomatic keep-warm function\nDurable and high quality\nFlower design on the body\nMeasuring cup and spoon included\nEasy to use: cooks rice at the touch of a switch\nHeats from the bottom, top and sides\nThermal fuse protects the unit from burnout\nSteamer tray included (shown on the box)",
+    "specs": [
+      {
+        "label": "Brand",
+        "value": "Richpower"
+      },
+      {
+        "label": "Model",
+        "value": "RPRC-6086"
+      },
+      {
+        "label": "Product Type",
+        "value": "Electric Rice Cooker"
+      },
+      {
+        "label": "Capacity",
+        "value": "1.8 Liters"
+      },
+      {
+        "label": "Voltage",
+        "value": "220V – 240V"
+      },
+      {
+        "label": "Made In",
+        "value": "China"
+      },
+      {
+        "label": "Color",
+        "value": "Green ,Blue"
+      }
+    ],
+    "images": [
+      "/images/RPRC-6086-1.8L-Rice-Cooker_01.jpg"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Night Light warm Light",
+    "price": 1750,
+    "stock": 5,
+    "image": "/uploads/1793857166789-554a5811.jpg",
+    "category": "Lighting Products",
+    "subCategory": "Study Lamps / Reading Lamps",
+    "description": "Rechargeable Cordless Table Lamp, Adjustable Height, Warm Light Touch Control (ZL-329B)\n\nThis cordless table lamp gives a warm, soft light, and you can set the height to fit the space. The battery is built in, so you can use it anywhere without looking for an outlet.\n\nKey features\n\nAdjustable height: The telescopic stainless steel pole pulls out or pushes in. Keep it short as a bedside night light, or extend it into a taller table lamp for a desk, dining table or living room.\nSoft warm light: The light is steady, with no flicker, which suits reading, meals or sleep.\nTouch control: Tap the base to switch the lamp on or off. There are no switches or cords.\nRechargeable and cordless: Move it from room to room, or take it outside to a patio, balcony, café table or camping trip.\nTwisted shade: The white shade has a twisted, faceted design. It spreads the light evenly and looks good whether the lamp is on or off.\nStable base: The black base is round and weighted so the lamp stays upright at any height.",
+    "specs": [],
+    "images": [
+      "/uploads/1793857166789-554a5811.jpg",
+      "/uploads/1793857185905-5bcdd37f.png",
+      "/uploads/1793857195608-486bf19e.png"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Rich Whistling Kettle 2.7L",
+    "price": 3450,
+    "stock": 6,
+    "image": "/images/RICH Stainless Steel Whistling Kettle.png",
+    "category": "Kitchen Appliances",
+    "subCategory": "Kettle",
+    "description": "Stovetop kettle that whistles when the water boils\n2.7 litre capacity, good for larger families\nShiny silver body\nBlack handle on top\nBlack whistle cap on the spout",
+    "specs": [
+      {
+        "label": "Brand",
+        "value": "Rich"
+      },
+      {
+        "label": "Model",
+        "value": "RHWK-1136"
+      },
+      {
+        "label": "Product Type",
+        "value": "Whistling Kettle"
+      },
+      {
+        "label": "Capacity",
+        "value": "2.7 Liters"
+      },
+      {
+        "label": "Color",
+        "value": "Silver"
+      }
+    ],
+    "images": [
+      "/images/RICH Stainless Steel Whistling Kettle.png",
+      "/images/rich-whistling-kettle.png"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Nexon Rice Cooker 2.8L",
+    "price": 9550,
+    "stock": 3,
+    "image": "/images/nexon_rice_cooker_cleaned.png",
+    "category": "Kitchen Appliances",
+    "subCategory": "Rice Cooker",
+    "description": "2.8 litre capacity, great for large families and gatherings\nStainless steel steamer tray for vegetables and other dishes\nNon-stick inner pot that’s easy to clean\nSimple cook and warm switch with indicator lights\nCream body with floral print and a carry handle on the lid\nCool-touch side handles and a stable base",
+    "specs": [
+      {
+        "label": "Brand",
+        "value": "Nexon"
+      },
+      {
+        "label": "Product Type",
+        "value": "Electric Rice Cooker"
+      },
+      {
+        "label": "Capacity",
+        "value": "2.8 Liters"
+      }
+    ],
+    "images": [
+      "/images/nexon_rice_cooker_cleaned.png"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Rich Whistling Kettle 1.6L",
+    "price": 2650,
+    "stock": 1,
+    "image": "/images/RICH Stainless Steel Whistling Kettle Packaging.png",
+    "category": "Kitchen Appliances",
+    "subCategory": "Kettle",
+    "description": "Stovetop kettle that whistles when the water boils\n1.6 litre capacity\nShiny silver body\nBlack handle on top\nBlack whistle cap on the spout",
+    "specs": [
+      {
+        "label": "Brand",
+        "value": "Rich"
+      },
+      {
+        "label": "Model",
+        "value": "RHWK-1133"
+      },
+      {
+        "label": "Product Type",
+        "value": "Whistling Kettle"
+      },
+      {
+        "label": "Capacity",
+        "value": "1.6 Liters"
+      },
+      {
+        "label": "Color",
+        "value": "Silver & Black"
+      }
+    ],
+    "images": [
+      "/images/RICH Stainless Steel Whistling Kettle Packaging.png",
+      "/images/rich-whistling-kettle.png"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "pressure Cooker",
+    "price": 7950,
+    "stock": 1,
+    "image": null,
+    "category": "Kitchen Appliances",
+    "subCategory": "Multi Cooker",
+    "description": null,
+    "specs": [],
+    "images": []
+  },
+  {
+    "id": 9,
+    "name": "Multi Functional Electric Cooking Pot",
+    "price": 5300,
+    "stock": 1,
+    "image": "images/SuTai4.png",
+    "category": "Kitchen Appliances",
+    "subCategory": "Multi Cooker",
+    "description": null,
+    "specs": [
+      {
+        "label": "Model",
+        "value": "ST-931"
+      },
+      {
+        "label": "Power Output",
+        "value": "450 W"
+      },
+      {
+        "label": "Voltage",
+        "value": "220v-50Hz"
+      }
+    ],
+    "images": [
+      "images/SuTai4.png",
+      "images/SuTai1.png",
+      "images/SuTai2.png",
+      "images/SuTai3.png"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Pigeon Multipurpose Kessel  3-in-1",
+    "price": 9650,
+    "stock": 3,
+    "image": "images/multicooker1.png",
+    "category": "Kitchen Appliances",
+    "subCategory": "Multi Cooker",
+    "description": "Ideal For Travel\n1.5 Litre Capacity\n600 watts power 230V 50Hz Voltage\nStylish Stainless Steel Body\nElegant Glass Lid",
+    "specs": [
+      {
+        "label": "Brand",
+        "value": "Pigeon"
+      },
+      {
+        "label": "Capacity",
+        "value": "1.5 Liters"
+      },
+      {
+        "label": "Material",
+        "value": "Stainless Steel"
+      },
+      {
+        "label": "Colour",
+        "value": "Silva"
+      }
+    ],
+    "images": [
+      "images/multicooker1.png",
+      "images/multicooker2.png"
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Richpower Sandwich Maker",
+    "price": 4300,
+    "stock": 4,
+    "image": "/images/Richpower Sandwich Maker Showcase.png",
+    "category": "Kitchen Appliances",
+    "subCategory": "Toaster",
+    "description": null,
+    "specs": [],
+    "images": [
+      "/images/Richpower Sandwich Maker Showcase.png"
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Selfie Fill Light",
+    "price": 1650,
+    "stock": 4,
+    "image": "/images/selfi1.png",
+    "category": "Lighting Products",
+    "subCategory": null,
+    "description": "Selfie LED Light – Product Features\n\n*Bright LED lighting for selfies, videos, video calls, and photography.\n* Universal clip design for attaching to compatible smartphones, tablets, laptops, and mirrors.\n* USB rechargeable battery for convenient everyday use.\n- Adjustable brightness levels to suit different lighting conditions.\n* Lightweight and compact design for easy carrying while travelling.\n* Suitable for makeup application, social media videos, online meetings, and beauty tutorials.",
+    "specs": [
+      {
+        "label": "Brand",
+        "value": "Generic"
+      },
+      {
+        "label": "Connectivity technology",
+        "value": "Clip on"
+      },
+      {
+        "label": "Hardware interface",
+        "value": "USB Type C"
+      },
+      {
+        "label": "Product dimensions",
+        "value": "6.5L x 6.5W x 1H centimetres"
+      }
+    ],
+    "images": [
+      "/images/selfi1.png",
+      "/images/selficam.png",
+      "/images/selficam2.png"
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Sony DM 301 Wired Microphone",
+    "price": 2350,
+    "stock": 5,
+    "image": "/images/protech_dm301_clear.png",
+    "category": "TV & Home Audio",
+    "subCategory": null,
+    "description": "Sony Pro-Tech DM-301 Wired Dynamic Microphone\n\nA handheld wired microphone for karaoke, singing, speeches and small events. The metal mesh grille and solid body give clear vocals and reduce background noise, so your voice comes through cleanly.\n\nFeatures\n\nDynamic microphone for clear, natural sound\nReduces background noise and feedback\nComfortable handheld grip with on/off switch\nDurable metal grille\nComes with a connecting cable\nWorks with karaoke systems, amplifiers, speakers and mixers",
+    "specs": [
+      {
+        "label": "Type",
+        "value": "Dynamic Microphone"
+      },
+      {
+        "label": "Switch",
+        "value": "On/Off"
+      },
+      {
+        "label": "Color",
+        "value": "Black & Silver"
+      }
+    ],
+    "images": [
+      "/images/protech_dm301_clear.png"
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Car Dashboard Decoration Items",
+    "price": 800,
+    "stock": 3,
+    "image": "/images/dashboaditem.png",
+    "category": "Vehicle Accessories",
+    "subCategory": null,
+    "description": "Car Dashboard Decoration Items , Valentine Gift , Cute Couple Miniature Toys for Car Dashboard",
+    "specs": [
+      {
+        "label": "Product Type",
+        "value": "Car Dashboard Ornament"
+      },
+      {
+        "label": "Design",
+        "value": "Boy & Girl Couple with Balloons"
+      }
+    ],
+    "images": [
+      "/images/dashboaditem.png",
+      "/images/dashboadsize.png"
+    ]
+  },
+  {
+    "id": 19,
+    "name": "TAIKO Rice Cooker 600ml",
+    "price": 5500,
+    "stock": 3,
+    "image": "/images/tako_rice_cooker_600ml_clear.png",
+    "category": "Kitchen Appliances",
+    "subCategory": "Rice Cooker",
+    "description": null,
+    "specs": [],
+    "images": [
+      "/images/tako_rice_cooker_600ml_clear.png"
+    ]
+  },
+  {
+    "id": 20,
+    "name": "TAIKO Rice Cooker 1.8L",
+    "price": 8350,
+    "stock": 3,
+    "image": "/images/tako_rice_cooker_1_8l_clear.png",
+    "category": "Kitchen Appliances",
+    "subCategory": "Rice Cooker",
+    "description": null,
+    "specs": [],
+    "images": [
+      "/images/tako_rice_cooker_1_8l_clear.png"
+    ]
+  },
+  {
+    "id": 21,
+    "name": "TAIKO Rice Cooker 1.5L",
+    "price": 7350,
+    "stock": 5,
+    "image": "/images/tako_rice_cooker_1_5l_clear.png",
+    "category": "Kitchen Appliances",
+    "subCategory": "Rice Cooker",
+    "description": null,
+    "specs": [],
+    "images": [
+      "/images/tako_rice_cooker_1_5l_clear.png"
+    ]
+  },
+  {
+    "id": 22,
+    "name": "TAIKO Rice Cooker 1L",
+    "price": 6350,
+    "stock": 4,
+    "image": "/images/tako_rice_cooker_1l_clear.png",
+    "category": "Kitchen Appliances",
+    "subCategory": "Rice Cooker",
+    "description": null,
+    "specs": [],
+    "images": [
+      "/images/tako_rice_cooker_1l_clear.png"
+    ]
+  },
+  {
+    "id": 23,
+    "name": "20W LED Touch Master premium",
+    "price": 4550,
+    "stock": 3,
+    "image": "/uploads/1793854762301-d9769ba1.jpg",
+    "category": "Lighting Products",
+    "subCategory": "Touch",
+    "description": "Master Premium MS-320 Rechargeable LED Torch\n\nA powerful, bright torch for home, outdoor and emergency use.\n\n20W LED for a strong, long-range beam\nRechargeable lithium battery, so no need to keep buying batteries\nExtra bright light for night work, camping, fishing and power cuts\nEasy-grip handle with buttons on the handle\nStrong metal-look body with a large reflector head\nEco-friendly, since it can be reused and recharged",
+    "specs": [],
+    "images": [
+      "/uploads/1793854762301-d9769ba1.jpg"
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Sunset And Sunrise Light",
+    "price": 960,
+    "stock": 3,
+    "image": "/uploads/1793866868892-1457d0d3.png",
+    "category": "Gift & Décor",
+    "subCategory": null,
+    "description": "USB Lamp, Rainbow LED Ambient Light, Sunset And Sunrise Light, Bedroom Bedside Small Night Light Projection, Internet Celebrity Photo Decoration Light, Home Portable Ambient Light",
+    "specs": [],
+    "images": [
+      "/uploads/1793866868892-1457d0d3.png",
+      "/uploads/1793866898385-ce20d5d2.png",
+      "/uploads/1793866907254-3a1d7c10.png"
+    ]
+  },
+  {
+    "id": 25,
+    "name": "2M(20LED) Artificial Ivy Garland with LED Fairy Lights",
+    "price": 950,
+    "stock": 5,
+    "image": "/uploads/1793868427367-cd4b8172.png",
+    "category": "Gift & Décor",
+    "subCategory": null,
+    "description": "1pc 2M(20LED) Artificial Ivy Garland with LED Fairy Lights, Fake Ivy Vines String Lights, Hanging Green Leaves Plants for Home Garden Wedding Party Wall Decor, Christmas Decorations for Indoor Outdoor Bedroom Patio Garden",
+    "specs": [],
+    "images": [
+      "/uploads/1793868427367-cd4b8172.png",
+      "/uploads/1793868435332-620d6561.png",
+      "/uploads/1793868443106-e212b96b.png",
+      "/uploads/1793868451823-be058a19.png"
+    ]
+  },
+  {
+    "id": 26,
+    "name": "2D Flat, Single-piece Mother's Day Wooden Ornament",
+    "price": 1050,
+    "stock": 3,
+    "image": "/uploads/1793869280900-2f9b9f27.png",
+    "category": "Gift & Décor",
+    "subCategory": null,
+    "description": "2D Flat, Single-piece Mother's Day Wooden Ornament, \"Best Mom Ever,\" a Holiday Gift for Mom, Decorative Sign & Plaque, Suitable for Desktop Decoration, Living Room Table/bedroom Bedside/vanity, Study Desk, Mother's Day Party, 2D Flat",
+    "specs": [],
+    "images": [
+      "/uploads/1793869280900-2f9b9f27.png",
+      "/uploads/1793869289513-da754c1e.png",
+      "/uploads/1793869297383-3340efda.png"
+    ]
+  },
+  {
+    "id": 27,
+    "name": "22pcs 3D Miniature Dollhouse Scene Sticker Book",
+    "price": 1450,
+    "stock": 3,
+    "image": "/uploads/1793870207856-367a8c2f.png",
+    "category": "Gift & Décor",
+    "subCategory": null,
+    "description": "22pcs 3D Miniature Dollhouse Scene Sticker Book with Tweezers - disposable DIY Micro Scenes Suitable for Kids' Crafts, Dollhouse Building, Mini Dioramas - Multicolor Mini Scenes, 3D Houses & Landscapes",
+    "specs": [],
+    "images": [
+      "/uploads/1793870207856-367a8c2f.png",
+      "/uploads/1793870254780-484be969.png"
+    ]
+  }
+]

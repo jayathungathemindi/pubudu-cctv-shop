@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import WhatsAppButton from "./WhatsAppButton";
 import { AddToCartButton } from "./Cart";
+import { fetchProduct } from "../../api";
 import "./ProductDetails.css";
 
 function ProductDetails({ productId, onClose }) {
@@ -10,11 +11,7 @@ function ProductDetails({ productId, onClose }) {
 
   // Load the full product (with specifications) from the server
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${productId}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Server error");
-        return res.json();
-      })
+    fetchProduct(productId)
       .then((data) => setProduct(data))
       .catch(() => setError("Could not load product details."));
   }, [productId]);
