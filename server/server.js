@@ -1,4 +1,6 @@
 const path = require("path");
+const fs = require("fs");
+const crypto = require("crypto");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 const express = require("express");
 const cors = require("cors");
@@ -10,6 +12,41 @@ const requireAdmin = require("./middleware/auth");
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Uploaded product images are saved here and served at /uploads/<file>
+const UPLOAD_DIR = path.join(__dirname, "uploads");
+fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+app.use("/uploads", express.static(UPLOAD_DIR));
+
+// Image type → file extension
+const IMAGE_TYPES = {
+  "image/jpeg": ".jpg",
+  "image/png": ".png",
+  "image/webp": ".webp",
+  "image/gif": ".gif",
+};
+
+// Upload one image (admin only). The body is the raw image file.
+app.post(
+  "/api/uploads",
+  requireAdmin,
+  express.raw({ type: Object.keys(IMAGE_TYPES), limit: "5mb" }),
+  async (req, res) => {
+    const ext = IMAGE_TYPES[req.headers["content-type"]];
+    if (!ext || !Buffer.isBuffer(req.body) || req.body.length === 0) {
+      return res.status(400).json({ message: "Please choose a JPG, PNG, WEBP or GIF image" });
+    }
+
+    const fileName = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}${ext}`;
+    try {
+      await fs.promises.writeFile(path.join(UPLOAD_DIR, fileName), req.body);
+      res.json({ url: `http://localhost:${process.env.PORT}/uploads/${fileName}` });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Could not save the image" });
+    }
+  },
+);
 
 // Get all products
 app.get("/api/products", async (req, res) => {
@@ -83,7 +120,7 @@ const categories = {
     "Kettle",
   ],
   "Home Appliances": ["Iron", "Fan"],
-  "Lighting Products": [],
+  "Lighting Products": ["Study Lamps / Reading Lamps", "Touch"],
   "Vehicle Accessories": [],
   "Hardware & Electrical": [],
   "Gift & Décor": [],
@@ -151,7 +188,10 @@ async function saveImages(transaction, productId, images) {
 // Checks product data - returns an error message, or null if OK
 function validateProduct({ name, price, stock, category, subCategory }) {
   if (!name || !name.trim()) return "Product name is required";
+  // Same limits as the database columns
+  if (name.trim().length > 150) return "Product name is too long (max 150 characters)";
   if (isNaN(price) || Number(price) <= 0) return "Price must be more than 0";
+  if (Number(price) >= 100000000) return "Price is too high";
   if (isNaN(stock) || Number(stock) < 0) return "Stock cannot be negative";
   if (!Object.hasOwn(categories, category)) return "Please choose a valid category";
   // Sub-category is optional, but must belong to the chosen category
@@ -268,6 +308,32 @@ app.put("/api/products/:id", requireAdmin, async (req, res) => {
   }
 });
 
+// Delete a product (admin only). Its specs and images are removed by ON DELETE CASCADE.
+app.delete("/api/products/:id", requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ message: "Invalid product id" });
+  }
+
+  try {
+    const pool = await getPool();
+    const result = await pool
+      .request()
+      .input("id", sql.Int, id)
+      .query("DELETE FROM Products WHERE Id = @id");
+
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.json({ message: "Product deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Database error" });
+  }
+});
+
 // Admin login
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
@@ -314,6 +380,14 @@ app.post("/api/auth/login", async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+// Image bigger than the upload limit
+app.use((err, req, res, next) => {
+  if (err.type === "entity.too.large") {
+    return res.status(413).json({ message: "Image is too big (max 5 MB)" });
+  }
+  next(err);
 });
 
 app.listen(process.env.PORT, () => {

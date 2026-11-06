@@ -1,17 +1,16 @@
 // ✏️ Change your shop details here - used by the Contact page and product cards
 export const shopInfo = {
   name: "Pubudu CCTV & Electricals",
-  phone: "+94 77 123 4567", // shown on the page
-  phoneLink: "+94771234567", // used for "click to call" (no spaces)
-  whatsapp: "94771234567", // country code + number, no + or spaces
-  email: "info@pubuducctv.lk",
+  phone: "+94 71 3680295", // shown on the page
+  phoneLink: "+94713680295", // used for "click to call" (no spaces)
+  whatsapp: "94713680295", // country code + number, no + or spaces
+  email: "jayathungathemindi@gmail.com",
   address:
     "No. 81/A, Deraniyagala, Kegalle District, Sabaragamuwa Province, Sri Lanka",
   mapQuery: "Deraniyagala, Kegalle, Sri Lanka", // what Google Maps should search for
   hours: [
     { days: "Monday – Friday", time: "8:30 AM – 6:30 PM" },
-    { days: "Saturday", time: "9:00 AM – 5:00 PM" },
-    { days: "Sunday", time: "Closed" },
+    { days: "Weekend", time: "9:00 AM – 5:00 PM" },
   ],
 };
 

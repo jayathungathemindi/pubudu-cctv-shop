@@ -216,6 +216,7 @@ function AddProduct({
             value={form.name}
             onChange={handleChange}
             placeholder="e.g. Samsung TV 43 inch"
+            maxLength={150}
             required
           />
         </label>
